@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from PIC_SERVER.PIC.models import Pic, PicGroup
+from PIC_SERVER.pic.models import Pic, PicGroup
 
 
 __author__ = 'yh'

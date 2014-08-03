@@ -20,6 +20,3 @@ def network_pic(request):
 
 	return render_to_response('pic/pic_list.html', locals(), context_instance=RequestContext(request))
 
-def test():
-	pass
-
