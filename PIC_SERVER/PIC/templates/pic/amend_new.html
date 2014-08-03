@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}工资变动编辑{% endblock %}
+
+{% block headcss %}
+	<link rel="stylesheet" href="{% static 'framework/inspinia/css/chosen.css' %}">
+	<link rel="stylesheet" href="{% static 'framework/inspinia/css/font-awesome.css' %}">
+	<link rel="stylesheet" href="{% static 'framework/inspinia/css/datepicker3.css' %}">
+{% endblock %}
+
+{% block content %}
+	<div class="row wrapper border-bottom white-bg page-heading" style="margin-bottom:20px;">
+		<div class="col-lg-10">
+			<h2>编辑工资变动</h2>
+			<ol class="breadcrumb">
+				<li><a href="/">首页</a></li>
+				<li><a href="{% url 'amend_amend_list' %} ">工资变动管理</a></li>
+				<li><a href="#">编辑工资变动</a></li>
+			</ol>
+		</div>
+	</div>
+	<form action=" {% if amend_id %}{% url 'amend_edit_amend' amend_id amend_type  %}{% else %} {% url 'amend_new_amend' amend_type  %} {% endif %}" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<div class="row">
+	<div class="col-lg-12">
+	<div class="ibox float-e-margins">
+	<div class="ibox-title">
+		<h5>工资变动信息
+		</h5>
+	</div>
+
+	<div class="ibox-content">
+	<div class="row">
+	<div class="col-sm-6">
+		<div class="form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">工资变动人</label>
+				<div class="col-sm-10">
+					<select required data-placeholder="请选择临时工资变动人" class="chosen-select" multiple style="width:350px;"
+					        name="staff"
+					        tabindex="2">
+						<option value="">请选择</option>
+						{% for staff in staff_list %}
+							<option {% if staff.id == form.id.value %}selected="selected"{% endif %} value="{{ staff.id }}">{{ staff.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group" id="date">
+				<label class="col-sm-2 control-label">变动月份</label>
+
+				<div class="input-group col-sm-10 date">
+												<span class="input-group-addon"><i
+														class="fa fa-calendar"></i></span>
+					<input required type="text" class="form-control" name="month"
+					       value="{{ form.month.value|default_if_none:""|date:"Y-m-d" }}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">备注</label>
+
+				<div class="col-sm-10">
+					<input maxlength="200" type="text" class="form-control" name="remark"
+					       value="{{ form.remark.value|default_if_none:"" }}"
+					       placeholder="工资变动备注信息">
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">类别</label>
+				<div class="col-sm-10">
+					<select required data-placeholder="请选择工资变动的类别" class="chosen-select" style="width:350px;"
+					        name="amend_type"
+					        tabindex="2">
+						<option value="">请选择</option>
+						{% if amend_type == 'AMEND_PLUS_TYPE' %}
+							{% for plus in amend_plus_list %}
+								<option {% if plus.id == form.amend_type.id.value %}selected="selected"{% endif %} value="{{ plus.id }}">{{ plus.name }}</option>
+							{% endfor %}
+						{% else %}
+							{% for plus in amend_sub_list %}
+								<option {% if plus.id == form.amend_type.id.value %}selected="selected"{% endif %} value="{{ plus.id }}">{{ plus.name }}</option>
+							{% endfor %}
+						{% endif %}
+
+					</select>
+				</div>
+				</div>
+
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label">变动金额</label>
+				<div class="col-sm-10">
+					<input maxlength="30" type="number" required name="money" type="text" class="form-control"
+					       value="{{ form.money.value|default_if_none:"" }}"
+					       placeholder="请输入工资变动奖励金额">
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group">
+				<div class="col-sm-offset-5">
+					<button class="btn btn-white" onclick="javascript:history.back(-1)" type="button">返回</button>
+					<button class="btn btn-primary" type="submit">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+	</div>
+	</div>
+{% endblock %}
+
+{% block headjs %}
+	<script src="{% static 'plugin/bootstrap-plugin/jqBootstrapValidation.js' %}"></script>
+	<script src="{% static 'framework/inspinia/js/chosen.jquery.js' %}"></script>
+	<script src="{% static 'framework/inspinia/js/bootstrap-datepicker.js' %}"></script>
+
+	<script>
+$(document).ready(function () {
+			$('#date .input-group.date').datepicker({
+				format: 'yyyy-mm',
+				todayBtn: "linked",
+				keyboardNavigation: false,
+				forceParse: false,
+				calendarWeeks: true,
+				autoclose: true
+			});
+
+			var config = {
+				'.chosen-select': {},
+				'.chosen-select-deselect': {allow_single_deselect: true},
+				'.chosen-select-no-single': {disable_search_threshold: 10},
+				'.chosen-select-no-results': {no_results_text: 'Oops, nothing found!'},
+				'.chosen-select-width': {width: "95%"}
+			}
+			for (var selector in config) {
+				$(selector).chosen(config[selector]);
+			}
+		})
+
+	</script>
+{% endblock %}
