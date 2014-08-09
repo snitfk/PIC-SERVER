@@ -124,8 +124,8 @@ INSTALLED_APPS = (
 
 	'pagination',
     'taggit',
-
-	'PIC_SERVER.PIC',
+	'mechanize',
+    'PIC_SERVER.pic',
 )
 
 # A sample logging configuration. The only tangible logging
